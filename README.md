@@ -1,5 +1,3 @@
-# Thesis_Breast_Cancer_Diagnosis_Screening_via_Deep_learning
-
 # Breast Cancer Diagnosis using Deep Learning
 
 This project explores the use of deep learning models for the diagnosis of breast cancer from mammography images. The primary goal was to develop a pipeline for tumor segmentation and classification using state-of-the-art architectures.
