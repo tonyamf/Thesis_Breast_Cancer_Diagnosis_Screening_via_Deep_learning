@@ -77,3 +77,29 @@ The project is implemented in Jupyter Notebooks, and there's a bit a prompt codi
 1.  Set up a Python environment with the required libraries (TensorFlow, Keras, etc.).
 2.  Mount your Google Drive to access the dataset.
 3.  Run the cells in the notebook sequentially to reproduce the experiments.
+
+## How to run (added by HubRefine)
+
+What is in the repo:
+
+- `notebooks/`: the original 2021 Colab notebooks (need Google Drive and the mammography data, which are **not** in this repo).
+- `python_files/`: a later Streamlit re-implementation of the same pipeline (U-Net, EfficientNet-B0, Meta Pseudo Labels), generated with an AI assistant. The author had not run it before; see below for what was checked. `combined_output.py` is a stale concatenation of these files (made by `merger.py`) and is not used.
+- The numbers quoted above (47% / 52% / Dice ~1% / 100% on Oxford Flowers) come from the thesis PDF in the repo root; nothing in `python_files/` reproduces them.
+
+Smoke test of `python_files/` (Python 3.11, CPU, no data, no GPU):
+
+```bash
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -r python_files/requirements.txt
+cd python_files
+python smoke_test.py          # tiny synthetic images; ~1 min; prints "SMOKE TEST PASSED"
+streamlit run app.py          # optional: starts the UI on http://localhost:8501
+```
+
+`smoke_test.py` only checks that preprocessing, augmentation, U-Net, EfficientNet-B0 (random init, no download), Meta Pseudo Labels and the metrics execute for one step on random data. It is **not a result**: it says nothing about accuracy, and the original thesis numbers cannot be reproduced without the mammography dataset. Output of a run: `python_files/proof/smoke_test_output.txt`.
+
+Known limitations:
+
+- `EfficientNetClassifier(...)` defaults to `weights='imagenet'`, which downloads pretrained weights on first use (not exercised by the smoke test).
+- Meta Pseudo Labels: the teacher receives no gradient (hard pseudo labels, and the student update is applied via `assign()`), so the teacher is never actually trained. The code now skips that update instead of crashing; the method itself is unchanged and still needs redesign to be a real MPL implementation.
+- The notebooks were not run (they need Colab/Drive and the data).

@@ -1,0 +1,15 @@
+# python -W ignore smoke_test.py   (tensorflow-cpu 2.14.1, python 3.11, synthetic data only)
+preprocess -> (512, 512)
+augment -> (128, 128, 1) (128, 128)
+unet 1 epoch loss: 0.8686934113502502
+classifier 1 epoch loss: 1.0986262559890747
+Epoch 1/1
+Student Loss: 4.7880
+Teacher Loss: 1.6445
+Pseudo Label Ratio: 1.0000
+Validation Accuracy: 0.6667
+--------------------------------------------------
+mpl history keys: ['student_loss', 'teacher_loss', 'pseudo_label_ratio', 'validation_accuracy']
+cls metrics keys: ['accuracy', 'precision_macro', 'recall_macro', 'f1_macro']
+dice(identical masks): 1.0
+SMOKE TEST PASSED

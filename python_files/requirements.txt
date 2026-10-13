@@ -1,0 +1,16 @@
+# Tested with Python 3.11 on Linux (CPU). tensorflow-cpu 2.14.1 needs numpy<2.
+# Use `tensorflow==2.14.1` instead of tensorflow-cpu if you want GPU support.
+tensorflow-cpu==2.14.1
+keras==2.14.0
+numpy==1.26.4
+albumentations==2.0.8
+opencv-python-headless==4.11.0.86
+matplotlib==3.11.2
+pandas==3.0.6
+plotly==7.1.0
+scikit-image==0.26.0
+scikit-learn==1.9.1
+scipy==1.17.1
+seaborn==0.13.2
+streamlit==1.60.0
+pillow==12.3.0
