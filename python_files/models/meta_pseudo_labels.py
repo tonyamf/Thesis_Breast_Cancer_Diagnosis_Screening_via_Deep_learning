@@ -80,7 +80,6 @@ class MetaPseudoLabels:
         
         return pseudo_labels, confidence_mask
     
-    @tf.function
     def student_training_step(self, labeled_data, labeled_labels, 
                              unlabeled_data, pseudo_labels, confidence_mask):
         """
@@ -125,7 +124,6 @@ class MetaPseudoLabels:
         
         return student_loss
     
-    @tf.function
     def teacher_training_step(self, validation_data, validation_labels, 
                              unlabeled_data, student_params_before):
         """
@@ -190,9 +188,13 @@ class MetaPseudoLabels:
         
         # Update teacher parameters
         teacher_gradients = tape.gradient(teacher_loss, self.teacher.trainable_variables)
-        self.teacher_optimizer.apply_gradients(
-            zip(teacher_gradients, self.teacher.trainable_variables)
-        )
+        # NOTE: the pseudo labels are hard (argmax) and the student update goes through
+        # variable.assign(), so no gradient reaches the teacher: all gradients are None.
+        # Original code crashed here; skip the update instead (teacher is NOT trained).
+        grads_and_vars = [(g, v) for g, v in zip(teacher_gradients, self.teacher.trainable_variables)
+                          if g is not None]
+        if grads_and_vars:
+            self.teacher_optimizer.apply_gradients(grads_and_vars)
         
         return teacher_loss
     

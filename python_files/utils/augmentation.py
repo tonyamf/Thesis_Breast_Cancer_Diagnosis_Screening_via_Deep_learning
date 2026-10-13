@@ -3,7 +3,6 @@ import cv2
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import albumentations as A
-from albumentations.pytorch import ToTensorV2
 import random
 
 class MammographyAugmentation:
@@ -50,7 +49,7 @@ class MammographyAugmentation:
             
             # Noise and blur
             A.OneOf([
-                A.GaussNoise(var_limit=(10.0, 50.0), p=0.3),
+                A.GaussNoise(std_range=(0.012, 0.028), p=0.3),  # ~ var_limit=(10, 50) on 0-255
                 A.GaussianBlur(blur_limit=(3, 5), p=0.2),
                 A.MedianBlur(blur_limit=3, p=0.2),
             ], p=0.4),
@@ -59,7 +58,6 @@ class MammographyAugmentation:
             A.ElasticTransform(
                 alpha=1,
                 sigma=50,
-                alpha_affine=50,
                 p=0.3
             ),
             

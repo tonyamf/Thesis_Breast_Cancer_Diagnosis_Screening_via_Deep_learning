@@ -9,7 +9,8 @@ class EfficientNetClassifier:
     """
     
     def __init__(self, num_classes=3, input_shape=(224, 224, 3), 
-                 efficientnet_version='B0', freeze_base=True, dropout_rate=0.2):
+                 efficientnet_version='B0', freeze_base=True, dropout_rate=0.2,
+                 weights='imagenet'):
         """
         Initialize EfficientNet classifier
         
@@ -19,7 +20,9 @@ class EfficientNetClassifier:
             efficientnet_version: Version of EfficientNet to use (B0-B7)
             freeze_base: Whether to freeze base model weights
             dropout_rate: Dropout rate for regularization
+            weights: 'imagenet' (downloads pretrained weights) or None (random init)
         """
+        self.weights = weights
         self.num_classes = num_classes
         self.input_shape = input_shape
         self.efficientnet_version = efficientnet_version
@@ -51,7 +54,7 @@ class EfficientNetClassifier:
         
         # Load pre-trained model
         base_model = model_map[self.efficientnet_version](
-            weights='imagenet',
+            weights=self.weights,
             include_top=False,
             input_shape=self.input_shape
         )
